@@ -4,18 +4,21 @@ import 'package:auto_route/auto_route.dart';
 import 'package:bluetooth_messaging_project/app/views/chat/view/widgets/chat_bubble.dart';
 import 'package:bluetooth_messaging_project/core/common/common_text_form_field.dart';
 import 'package:bluetooth_messaging_project/core/common/models/message_model.dart';
+import 'package:bluetooth_messaging_project/core/enum/chat_type.dart';
 import 'package:bluetooth_messaging_project/core/enum/message_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
 
 @RoutePage()
 class ChatView extends StatefulWidget {
-  final Device device;
+  final List<Device> device;
   final NearbyService service;
+  final ChatType type;
   const ChatView({
     super.key,
     required this.device,
     required this.service,
+    this.type = ChatType.single,
   });
 
   @override
@@ -51,11 +54,11 @@ class _ChatViewState extends State<ChatView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.device.deviceId),
+        title: Text(widget.device.first.deviceId),
         leading: IconButton(
           onPressed: () async {
             await widget.service
-                .disconnectPeer(deviceID: widget.device.deviceId);
+                .disconnectPeer(deviceID: widget.device.first.deviceId);
             if (!context.mounted) return;
             context.router.pop();
           },
@@ -88,7 +91,7 @@ class _ChatViewState extends State<ChatView> {
                 //   return;
                 // }
                 await widget.service.sendMessage(
-                  widget.device.deviceId,
+                  widget.device.first.deviceId,
                   _controller.text,
                 );
                 MessageModel message = MessageModel(

@@ -102,37 +102,90 @@ class _DeviceListViewState extends State<DeviceListView> {
                 Device device = widget.type == DeviceType.advertiser
                     ? connectedDevices[index]
                     : devices[index];
+
                 return ListTile(
-                  trailing: IconButton(
-                    icon: const Icon(Icons.check_box),
-                    onPressed: () {},
-                  ),
+                  trailing: widget.type == DeviceType.browser
+                      ? IconButton(
+                          icon: Icon(
+                            selectedDevices
+                                    .where((element) =>
+                                        element.deviceId == device.deviceId)
+                                    .isNotEmpty
+                                ? Icons.check_box
+                                : Icons.check_box_outline_blank,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (selectedDevices.contains(device)) {
+                                selectedDevices.remove(device);
+                              } else {
+                                selectedDevices.add(device);
+                              }
+                            });
+                            debugPrint(
+                              selectedDevices
+                                  .map((e) => e.deviceName)
+                                  .join('-'),
+                            );
+                          },
+                        )
+                      : null,
                   title: Text(device.deviceName),
-                  onTap: () async {
-                    if (widget.type == DeviceType.browser) {
-                      await nearbyService.invitePeer(
-                        deviceID: device.deviceId,
-                        deviceName: device.deviceName,
-                      );
-                      if (!context.mounted) return;
-                      context.router.push(
-                        ChatRoute(
-                          device: device,
-                          service: nearbyService,
-                        ),
-                      );
-                    } else {
-                      context.router.push(
-                        ChatRoute(
-                          device: device,
-                          service: nearbyService,
-                        ),
-                      );
-                    }
-                  },
+                  // onTap: () async {
+                  //   if (widget.type == DeviceType.browser) {
+                  //     await nearbyService.invitePeer(
+                  //       deviceID: device.deviceId,
+                  //       deviceName: device.deviceName,
+                  //     );
+                  //     if (!context.mounted) return;
+                  //     context.router.push(
+                  //       ChatRoute(
+                  //         device: device,
+                  //         service: nearbyService,
+                  //       ),
+                  //     );
+                  //   } else {
+                  //     context.router.push(
+                  //       ChatRoute(
+                  //         device: device,
+                  //         service: nearbyService,
+                  //       ),
+                  //     );
+                  //   }
+                  // },
                 );
               },
             ),
+            ElevatedButton.icon(
+              onPressed: () async {
+                if (widget.type == DeviceType.browser) {
+                  for (var device in selectedDevices) {
+                    await nearbyService.invitePeer(
+                      deviceID: device.deviceId,
+                      deviceName: device.deviceName,
+                    );
+                  }
+                  if (!context.mounted) return;
+                  context.router.push(
+                    ChatRoute(
+                      device: devices,
+                      service: nearbyService,
+                    ),
+                  );
+                } else {
+                  context.router.push(
+                    ChatRoute(
+                      device: devices,
+                      service: nearbyService,
+                    ),
+                  );
+                }
+              },
+              icon: const Icon(Icons.group_add),
+              label: Text(widget.type == DeviceType.browser
+                  ? 'Create a Chat'
+                  : 'Join a Chat'),
+            )
           ],
         ),
       ),

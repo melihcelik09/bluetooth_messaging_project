@@ -23,6 +23,7 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           device: args.device,
           service: args.service,
+          type: args.type,
         ),
       );
     },
@@ -50,8 +51,9 @@ abstract class _$AppRouter extends RootStackRouter {
 class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
   ChatRoute({
     Key? key,
-    required Device device,
+    required List<Device> device,
     required NearbyService service,
+    ChatType type = ChatType.single,
     List<PageRouteInfo>? children,
   }) : super(
           ChatRoute.name,
@@ -59,6 +61,7 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
             key: key,
             device: device,
             service: service,
+            type: type,
           ),
           initialChildren: children,
         );
@@ -73,17 +76,20 @@ class ChatRouteArgs {
     this.key,
     required this.device,
     required this.service,
+    this.type = ChatType.single,
   });
 
   final Key? key;
 
-  final Device device;
+  final List<Device> device;
 
   final NearbyService service;
 
+  final ChatType type;
+
   @override
   String toString() {
-    return 'ChatRouteArgs{key: $key, device: $device, service: $service}';
+    return 'ChatRouteArgs{key: $key, device: $device, service: $service, type: $type}';
   }
 }
 
