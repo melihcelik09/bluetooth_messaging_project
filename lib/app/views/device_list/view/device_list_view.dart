@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:bluetooth_messaging_project/core/enum/chat_type.dart';
 import 'package:bluetooth_messaging_project/core/enum/device_type.dart';
 import 'package:bluetooth_messaging_project/core/navigation/app_router.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -37,7 +38,6 @@ class _DeviceListViewState extends State<DeviceListView> {
         deviceName: info.data["name"],
         strategy: Strategy.P2P_CLUSTER,
         callback: (isRunning) async {
-          debugPrint('Service is running: $isRunning');
           if (widget.type == DeviceType.browser) {
             await nearbyService.stopBrowsingForPeers();
             await nearbyService.startBrowsingForPeers();
@@ -61,15 +61,6 @@ class _DeviceListViewState extends State<DeviceListView> {
                 .where((element) => element.state == SessionState.connected)
                 .toList(),
           );
-          debugPrint('Devices ${devices.map((e) => e.deviceName).join('--')}');
-          debugPrint(
-              'Connected ${connectedDevices.map((e) => e.deviceName).join('--')}');
-          // for (Device device in nearby) {
-          //   nearbyService.invitePeer(
-          //     deviceID: device.deviceId,
-          //     deviceName: device.deviceName,
-          //   );
-          // }
         });
       },
     );
@@ -154,8 +145,6 @@ class _DeviceListViewState extends State<DeviceListView> {
             ElevatedButton.icon(
               onPressed: () async {
                 if (widget.type == DeviceType.browser) {
-                  debugPrint(
-                      'Selected Devices: ${selectedDevices.map((e) => e.deviceName).join('--')}');
                   for (Device device in selectedDevices) {
                     await nearbyService.invitePeer(
                       deviceID: device.deviceId,
@@ -165,14 +154,17 @@ class _DeviceListViewState extends State<DeviceListView> {
                   if (!context.mounted) return;
                   context.router.push(
                     ChatRoute(
-                      devices: devices,
+                      devices: selectedDevices,
                       service: nearbyService,
+                      type: ChatType.group,
                     ),
                   );
                 } else {
                   context.router.push(
                     ChatRoute(
-                      devices: devices,
+                      devices: widget.type == DeviceType.advertiser
+                          ? connectedDevices
+                          : devices,
                       service: nearbyService,
                     ),
                   );
