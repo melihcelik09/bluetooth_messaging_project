@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
   final bool isSender;
+  final String deviceId;
   final String message;
   const ChatBubble({
     super.key,
     this.isSender = false,
     required this.message,
+    required this.deviceId,
   });
 
   @override
@@ -19,7 +21,20 @@ class ChatBubble extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.grey,
         ),
-        child: Text(message),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            isSender
+                ? const SizedBox.shrink()
+                : Text(
+                    deviceId,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+            Text(message),
+          ],
+        ),
       ),
     );
   }
