@@ -21,7 +21,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: ChatView(
           key: args.key,
-          device: args.device,
+          devices: args.devices,
           service: args.service,
           type: args.type,
         ),
@@ -51,7 +51,7 @@ abstract class _$AppRouter extends RootStackRouter {
 class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
   ChatRoute({
     Key? key,
-    required List<Device> device,
+    required List<Device> devices,
     required NearbyService service,
     ChatType type = ChatType.single,
     List<PageRouteInfo>? children,
@@ -59,7 +59,7 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
           ChatRoute.name,
           args: ChatRouteArgs(
             key: key,
-            device: device,
+            devices: devices,
             service: service,
             type: type,
           ),
@@ -74,14 +74,14 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
 class ChatRouteArgs {
   const ChatRouteArgs({
     this.key,
-    required this.device,
+    required this.devices,
     required this.service,
     this.type = ChatType.single,
   });
 
   final Key? key;
 
-  final List<Device> device;
+  final List<Device> devices;
 
   final NearbyService service;
 
@@ -89,7 +89,7 @@ class ChatRouteArgs {
 
   @override
   String toString() {
-    return 'ChatRouteArgs{key: $key, device: $device, service: $service, type: $type}';
+    return 'ChatRouteArgs{key: $key, devices: $devices, service: $service, type: $type}';
   }
 }
 

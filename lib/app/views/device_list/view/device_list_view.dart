@@ -122,11 +122,6 @@ class _DeviceListViewState extends State<DeviceListView> {
                                 selectedDevices.add(device);
                               }
                             });
-                            debugPrint(
-                              selectedDevices
-                                  .map((e) => e.deviceName)
-                                  .join('-'),
-                            );
                           },
                         )
                       : null,
@@ -159,7 +154,9 @@ class _DeviceListViewState extends State<DeviceListView> {
             ElevatedButton.icon(
               onPressed: () async {
                 if (widget.type == DeviceType.browser) {
-                  for (var device in selectedDevices) {
+                  debugPrint(
+                      'Selected Devices: ${selectedDevices.map((e) => e.deviceName).join('--')}');
+                  for (Device device in selectedDevices) {
                     await nearbyService.invitePeer(
                       deviceID: device.deviceId,
                       deviceName: device.deviceName,
@@ -168,23 +165,25 @@ class _DeviceListViewState extends State<DeviceListView> {
                   if (!context.mounted) return;
                   context.router.push(
                     ChatRoute(
-                      device: devices,
+                      devices: devices,
                       service: nearbyService,
                     ),
                   );
                 } else {
                   context.router.push(
                     ChatRoute(
-                      device: devices,
+                      devices: devices,
                       service: nearbyService,
                     ),
                   );
                 }
               },
               icon: const Icon(Icons.group_add),
-              label: Text(widget.type == DeviceType.browser
-                  ? 'Create a Chat'
-                  : 'Join a Chat'),
+              label: Text(
+                widget.type == DeviceType.browser
+                    ? 'Create a Chat'
+                    : 'Join a Chat',
+              ),
             )
           ],
         ),
