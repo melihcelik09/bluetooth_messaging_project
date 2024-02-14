@@ -35,8 +35,11 @@ class _ChatViewState extends State<ChatView> {
     super.initState();
     receivedDataSubscription = widget.service.dataReceivedSubscription(
       callback: (data) {
-        MessageModel message =
-            MessageModel(content: data["message"], type: MessageType.receiver);
+        MessageModel message = MessageModel(
+          senderId: data["senderDeviceId"],
+          content: data["message"],
+          type: MessageType.receiver,
+        );
         setState(() {
           messages.add(message);
         });
@@ -81,8 +84,17 @@ class _ChatViewState extends State<ChatView> {
                 },
               ),
             ),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.mic)),
             IconButton(
               onPressed: () async {
+                debugPrint(widget.devices.map((e) => e.deviceId).join(", "));
+                if (_controller.text == "/clear") {
+                  setState(() {
+                    messages.clear();
+                    _controller.clear();
+                  });
+                  return;
+                }
                 // if (widget.device.state == SessionState.notConnected) {
                 //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 //     content: Text("disconnected"),
@@ -90,15 +102,18 @@ class _ChatViewState extends State<ChatView> {
                 //   ));
                 //   return;
                 // }
-                await widget.service.sendMessage(
-                  widget.devices.first.deviceId,
-                  _controller.text,
-                );
                 MessageModel message = MessageModel(
                   content: _controller.text,
                   type: MessageType.sender,
                 );
-
+                for (Device device in widget.devices) {
+                  await widget.service.sendMessage(
+                    device.deviceId,
+                    _controller.text,
+                  );
+                  debugPrint(
+                      "Message Sent to ${device.deviceId} : ${_controller.text}");
+                }
                 setState(() {
                   messages.add(message);
                   _controller.clear();
@@ -109,19 +124,23 @@ class _ChatViewState extends State<ChatView> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: ListView.builder(
-        itemCount: messages.length,
-        itemBuilder: (context, index) {
-          MessageModel model = messages[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            child: ChatBubble(
-              message: model.content,
-              isSender: model.type == MessageType.sender ? true : false,
-            ),
-          );
-        },
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: ListView.builder(
+          itemCount: messages.length,
+          itemBuilder: (context, index) {
+            MessageModel model = messages[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: ChatBubble(
+                deviceId: model.senderId ?? '',
+                message: model.content,
+                isSender: model.type == MessageType.sender ? true : false,
+              ),
+            );
+          },
+        ),
       ),
     );
   }
