@@ -5,7 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:bluetooth_messaging_project/app/views/chat/view/chat_view.dart';
 import 'package:bluetooth_messaging_project/core/common/models/message_model.dart';
 import 'package:bluetooth_messaging_project/core/enum/message_type.dart';
-import 'package:bluetooth_messaging_project/core/extension/string_extension.dart';
+import 'package:bluetooth_messaging_project/core/extension/duration_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
