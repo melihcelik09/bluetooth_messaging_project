@@ -88,9 +88,11 @@ class _ChatViewState extends State<ChatView> with ChatViewMixin {
                   });
                   return;
                 }
+
                 MessageModel message = MessageModel(
-                  content: controller.text,
+                  content: audioPath ?? controller.text,
                   type: MessageType.sender,
+                  isVoiceMessage: audioPath != null,
                 );
                 for (Device device in widget.devices) {
                   await widget.service.sendMessage(
@@ -112,6 +114,7 @@ class _ChatViewState extends State<ChatView> with ChatViewMixin {
       body: SizedBox(
         height: MediaQuery.of(context).size.height * 0.8,
         child: ListView.builder(
+          shrinkWrap: true,
           itemCount: messages.length,
           itemBuilder: (context, index) {
             MessageModel model = messages[index];
@@ -121,6 +124,17 @@ class _ChatViewState extends State<ChatView> with ChatViewMixin {
                 deviceId: model.senderId ?? '',
                 message: model.content,
                 isSender: model.type == MessageType.sender ? true : false,
+                isVoiceMessage: model.isVoiceMessage,
+                voiceMessage: model.isVoiceMessage
+                    ? PlaySound(
+                        duration: getDuration(),
+                        position: position,
+                        maxDuration: maxDuration ?? recordDuration,
+                        isPlaying: isPlaying,
+                        player: player,
+                        playRecording: playRecording,
+                      )
+                    : null,
               ),
             );
           },
