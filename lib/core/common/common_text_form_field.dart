@@ -43,6 +43,7 @@ class CommonTextFormField extends StatelessWidget {
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
+        fillColor: Colors.grey[300],
         filled: true,
       ),
       readOnly: readOnly,
