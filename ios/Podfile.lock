@@ -7,8 +7,6 @@ PODS:
   - flutter_nearby_connections (0.0.1):
     - Flutter
     - SwiftyJSON (~> 4.0)
-  - just_waveform (0.0.1):
-    - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -22,7 +20,6 @@ DEPENDENCIES:
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_nearby_connections (from `.symlinks/plugins/flutter_nearby_connections/ios`)
-  - just_waveform (from `.symlinks/plugins/just_waveform/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - record_darwin (from `.symlinks/plugins/record_darwin/ios`)
 
@@ -39,8 +36,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_nearby_connections:
     :path: ".symlinks/plugins/flutter_nearby_connections/ios"
-  just_waveform:
-    :path: ".symlinks/plugins/just_waveform/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   record_darwin:
@@ -51,7 +46,6 @@ SPEC CHECKSUMS:
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_nearby_connections: 68c6cb88dcbf781e74adac01f4e93b853a30ee34
-  just_waveform: e03174d1eadf4b096b01715a3e3ccbf940a05d25
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   record_darwin: 1f6619f2abac4d1ca91d3eeab038c980d76f1517
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
