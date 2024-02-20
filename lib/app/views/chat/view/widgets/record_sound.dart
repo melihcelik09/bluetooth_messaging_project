@@ -14,20 +14,22 @@ class RecordSound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChatInputCard(
-      children: [
-        Text(duration),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Noises(
-              noises: noises,
-              color: Colors.green,
-              controller: controller,
+    return Expanded(
+      child: ChatInputCard(
+        children: [
+          Text(duration),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Noises(
+                noises: noises,
+                color: Colors.green,
+                controller: controller,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

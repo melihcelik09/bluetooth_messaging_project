@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bluetooth_messaging_project/app/views/chat/view/chat_view.dart';
@@ -26,6 +27,7 @@ mixin ChatViewMixin on State<ChatView> {
   Timer? _timer;
   late Duration recordDuration;
   late ScrollController noiseController;
+  Uint8List? audioBytes;
 
   @override
   void initState() {
@@ -46,11 +48,15 @@ mixin ChatViewMixin on State<ChatView> {
         /// the microphone.
         double scaled = (1 - (amp.current.abs() / 50)).clamp(0.05, 100.0) * 100;
         amplitudes.add(scaled);
-        noiseController.animateTo(
-          noiseController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (noiseController.hasClients) {
+            noiseController.animateTo(
+              noiseController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          }
+        });
       });
     });
 
@@ -76,6 +82,7 @@ mixin ChatViewMixin on State<ChatView> {
           senderId: data["senderDeviceId"],
           content: data["message"],
           type: MessageType.receiver,
+          isVoiceMessage: audioBytes != null,
         );
         setState(() {
           messages.add(message);
@@ -120,6 +127,15 @@ mixin ChatViewMixin on State<ChatView> {
       String? path = await recorder.stop();
       _timer?.cancel();
       debugPrint("Record Path: $path");
+
+      File file = File(path!);
+
+      Uint8List bytes = await file.readAsBytes();
+
+      setState(() {
+        audioBytes = bytes;
+      });
+
       setState(() {
         isRecording = false;
         audioPath = path;

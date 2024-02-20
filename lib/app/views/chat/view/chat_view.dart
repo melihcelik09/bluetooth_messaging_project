@@ -90,19 +90,25 @@ class _ChatViewState extends State<ChatView> with ChatViewMixin {
                 }
 
                 MessageModel message = MessageModel(
-                  content: audioPath ?? controller.text,
+                  content: audioBytes != null
+                      ? audioBytes.toString()
+                      : controller.text,
                   type: MessageType.sender,
-                  isVoiceMessage: audioPath != null,
+                  isVoiceMessage: audioBytes != null,
                 );
                 for (Device device in widget.devices) {
                   await widget.service.sendMessage(
                     device.deviceId,
-                    controller.text,
+                    message.content,
                   );
                 }
                 setState(() {
                   messages.add(message);
                   controller.clear();
+                  isRecording = false;
+                  isPlaying = false;
+                  audioPath = null;
+                  audioBytes = null;
                 });
               },
               icon: const Icon(Icons.send),
@@ -114,7 +120,7 @@ class _ChatViewState extends State<ChatView> with ChatViewMixin {
       body: SizedBox(
         height: MediaQuery.of(context).size.height * 0.8,
         child: ListView.builder(
-          shrinkWrap: true,
+          // shrinkWrap: true,
           itemCount: messages.length,
           itemBuilder: (context, index) {
             MessageModel model = messages[index];
@@ -125,16 +131,6 @@ class _ChatViewState extends State<ChatView> with ChatViewMixin {
                 message: model.content,
                 isSender: model.type == MessageType.sender ? true : false,
                 isVoiceMessage: model.isVoiceMessage,
-                voiceMessage: model.isVoiceMessage
-                    ? PlaySound(
-                        duration: getDuration(),
-                        position: position,
-                        maxDuration: maxDuration ?? recordDuration,
-                        isPlaying: isPlaying,
-                        player: player,
-                        playRecording: playRecording,
-                      )
-                    : null,
               ),
             );
           },
