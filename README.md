@@ -5,7 +5,7 @@
     <h1 align="center">Bluetooth Messaging Project</h1>
 </p>
 <p align="center">
-	<img src="https://img.shields.io/github/license/melihcelik09/bluetooth_messaging_project?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
+	<img src="https://img.shields.io/github/license/melihcelik09/bluetooth_messaging_project" alt="license">
 	<img src="https://img.shields.io/github/last-commit/melihcelik09/bluetooth_messaging_project?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
 	<img src="https://img.shields.io/github/languages/top/melihcelik09/bluetooth_messaging_project?style=flat&color=0080ff" alt="repo-top-language">
 </p>
